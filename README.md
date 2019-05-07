@@ -1,5 +1,8 @@
 # ResourceSearch
 
+## Documentation: 
+https://docs.google.com/document/d/1W9cIP9UzWSZRNMikePaQfSh763PG7DPmO4hwE1fEdkM/edit
+
 Project Setup:
 Instructions to setup Grpahhopper in the local machine:
 1. open the terminal and run the following commands:
