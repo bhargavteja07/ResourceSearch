@@ -1,10 +1,9 @@
-import java.text.ParseException;
 import java.util.*;
 
 public class Simulation {
 
     private int[] indexNeighbourArr = new int[6];
-    Utilities helper = new Utilities();
+    RSGenerics helper = new RSGenerics();
 
 
     public static void addCabToHexagon(Cab cab) {
@@ -13,10 +12,14 @@ public class Simulation {
         }
         if (ResourceSearchMain.hexagon_map.get(cab.destination_hex) != null) {
             ResourceSearchMain.hexagon_map.get(cab.destination_hex).addCab(cab);
+            cab.current_hexagon_id = cab.destination_hex;
+        } else {
+            ResourceSearchMain.hexagon_map.get(cab.current_hexagon_id).addCab(cab);
         }
+
     }
 
-    public List<Cab> simulate(List<Cab> cabList, Result res) {
+    public List<Cab> startSimulation(List<Cab> cabList, Result res) {
 
         List<Cab> temp = new ArrayList<>();
         for (int i = 0; i < cabList.size(); i++) {
@@ -26,36 +29,31 @@ public class Simulation {
                 if (cab.journeytime < 0) {
                     cab.journeytime = 0;
                     cab.status = 0;
-
                     addCabToHexagon(cab);
-                    cab.current_hexagon_id = cab.destination_hex;
                     cab.destination_hex = "";
 
                     temp.add(cab);
                 } else {
-                    cab.journeytime -= res.global_time / 60000.0;
+                    cab.journeytime -= res.global_time;
                     continue;
                 }
             }
-            if(cab.status==2) {
-
+            if (cab.status == 2) {
                 cab.current_travel_time -= res.global_time;
-
                 if (cab.current_travel_time > 0) {
-                    res.search_time += res.global_time / 60000.0;
+                    res.search_time += res.global_time;
                     continue;
                 } else if (cab.current_travel_time < 0 && !Objects.equals(cab.destination_hex, "")) {
                     addCabToHexagon(cab);
-                    cab.current_hexagon_id = cab.destination_hex;
                     cab.destination_hex = "";
                     cab.status = 0;
                 }
             }
+
             String cab_hex_id = cab.current_hexagon_id;
             Hexagon source_hexagon = ResourceSearchMain.hexagon_map.get(cab_hex_id);
 
-
-            if(source_hexagon!=null && source_hexagon.neighborList !=null) {
+            if (source_hexagon != null && source_hexagon.neighborList != null) {
 
                 List<String> firstRingNeighbours = source_hexagon.neighborList.get(0);
                 for (int l = 0; l < firstRingNeighbours.size(); l++)
@@ -64,15 +62,10 @@ public class Simulation {
                 Map<String, Integer> expectedNumbers = new HashMap<>();
 
                 // can be updated to CLOCK TIME
-                String current_time = "06:00:00";
-                try {
-                    current_time = helper.getTimeStamp(res.curr_time);
-                }
-                catch (ParseException ex){
+                String current_time = "00:00:00";
+                current_time = helper.getTimeRangeKey(res.curr_time);
 
-                }
-
-                // gets the first layer/ring of neighbours.
+                // gets the first layec xr/ring of neighbours.
 
 
                 for (int j = 0; j < firstRingNeighbours.size(); j++) {
@@ -84,22 +77,20 @@ public class Simulation {
                         expectedNumbers.put(neighbour, 1);
                 }
                 // Random based on Probability Distribution
-                //int chosenIndex = RandomNumberGenerator.customizedRandom(indexNeighbourArr, expectedNumbers, firstRingNeighbours);
+                int chosenIndex = RandomNumberGenerator.customizedRandom(indexNeighbourArr, expectedNumbers, firstRingNeighbours);
                 // // Normal Random
-                int chosenIndex = RandomNumberGenerator.normalRandom(firstRingNeighbours.size()-1);
+                //int chosenIndex = RandomNumberGenerator.normalRandom(firstRingNeighbours.size()-1);
 
                 String destination_hex_id = firstRingNeighbours.get(chosenIndex);
                 if (ResourceSearchMain.hexagon_map.get(destination_hex_id) != null) {
 
-                    Location destination = ResourceSearchMain.hexagon_map.get(firstRingNeighbours.get(chosenIndex)).center;
+                    GeoCoordinate destination = ResourceSearchMain.hexagon_map.get(firstRingNeighbours.get(chosenIndex)).center;
 
-                    int milliSeconds = Graphhopper.time(source_hexagon.center.latitude, source_hexagon.center.longitude, destination.latitude, destination.longitude);
+                    double destTime = GraphHopperWrapper.time(source_hexagon.center.latitude, source_hexagon.center.longitude, destination.latitude, destination.longitude) / ResourceSearchMain.ONE_MINUTE_IN_MILLIS;
 
-                    cab.setDestination(destination_hex_id, 0, milliSeconds, 2);
+                    cab.setDestination(destination_hex_id, 0, destTime, 2);
 //                System.out.println("travel time: " + cab.current_travel_time);
                 }
-
-
             }
         }
         return temp;

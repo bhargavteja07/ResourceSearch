@@ -1,4 +1,4 @@
-public class Location {
+public class GeoCoordinate {
     double latitude;
     double longitude;
 }

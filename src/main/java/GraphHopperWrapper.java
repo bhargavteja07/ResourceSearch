@@ -7,7 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class Graphhopper {
+public class GraphHopperWrapper {
     public static int time(double source_lat, double source_long, double dest_lat, double dest_long) {
         try {
 

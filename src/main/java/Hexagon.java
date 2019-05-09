@@ -5,7 +5,7 @@ import java.util.Map;
 public class Hexagon {
 
     List<List<String>> neighborList;
-    Location center = new Location();
+    GeoCoordinate center = new GeoCoordinate();
     Map<String, Integer> probabilities;
 
     double probability;

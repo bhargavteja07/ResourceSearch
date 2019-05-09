@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class PreProcess {
+public class BootConfig {
 
-    Utilities helper = new Utilities();
+    RSGenerics helper = new RSGenerics();
 
     Map<String, Hexagon> readHexagonsFromCSV(String fileName) {
         Map<String, Hexagon> hexagon_map = new HashMap<>();
@@ -46,7 +46,7 @@ public class PreProcess {
     public Hexagon createHexagon(String hexagon_id, String[] metadata, Hexagon hexagonOld) throws ParseException {
 
 
-        List<List<String>> neighbors = helper.readNeighborsList(hexagon_id, metadata[6]);
+        List<List<String>> neighbors = helper.getNeighboursList(hexagon_id, metadata[6]);
 //        System.out.println(metadata[5] + Objects.equals(metadata[5], "NULL"));
         int expectedCabs = Integer.parseInt((Objects.equals(metadata[5], "NULL") ? "0" : metadata[5]));
         String timestamp = metadata[4];

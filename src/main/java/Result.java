@@ -8,7 +8,7 @@ public class Result {
 	int assigned_resources;
 	int total_waiting;
 
-	public Result(int global_time, Date curr_time) {
+	public Result(double global_time, Date curr_time) {
 		this.search_time = 0;
 		this.total_dropped = 0;
 		this.wait_time = 0;

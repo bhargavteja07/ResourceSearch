@@ -6,9 +6,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class Utilities {
+public class RSGenerics {
 
-    public String getTimeStamp(Date date) throws ParseException {
+    public String getTimeRangeKey(Date date) {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -25,28 +25,8 @@ public class Utilities {
         return formattedDate;
     }
 
-    /***
-     *
-     *
-     * TO BE CHANGED!!
-     */
-//    public List<List<String>> readNeighborsList(String hexagon_id, String neighbors) {
-//
-//        neighbors = neighbors.replace("{", "");
-//        neighbors = neighbors.replace("}", "");
-//        neighbors = neighbors.replace("'", "");
-//        neighbors = neighbors.replace(" ", "");
-//        List<List<String>> neighbors_list = new ArrayList<>();
-//        String[] list = neighbors.split(":");
-//
-//        for (int i = 0; i < list.length; i++) {
-//            if (Objects.equals(list[i], hexagon_id))
-//                continue;
-////            neighbors_list.add(list[i]);
-//        }
-//        return neighbors_list;
-//    }
-    public List<List<String>> readNeighborsList(String hexagon_id, String neighbors) {
+
+    public List<List<String>> getNeighboursList(String hexagon_id, String neighbors) {
 
         neighbors = neighbors.replace("{", "");
         neighbors = neighbors.replace("}", "");
@@ -77,7 +57,6 @@ public class Utilities {
     public static String getHexFromGeo(double latitude, double longitude) throws IOException {
 
         H3Core h3 = H3Core.newInstance();
-
         return h3.geoToH3Address(latitude, longitude, 9);
 
     }

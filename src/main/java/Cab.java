@@ -1,9 +1,10 @@
 public class Cab {
 
-    Location current;
+    GeoCoordinate current;
     String current_hexagon_id;
     String current_time;
     int status;
+    int id = -1;
     String destination_hex;
     double destination_distance;
     double current_travel_time;
@@ -11,11 +12,12 @@ public class Cab {
     double journeytime;
 
 
-    Cab(String current_hexagon_id, String current_time, Location current) {
+    Cab(int id,String current_hexagon_id, String current_time, GeoCoordinate current) {
         this.current_hexagon_id = current_hexagon_id;
         this.current_time = current_time;
         this.current = current;
         this.status = 0;
+        this.id = id;
         this.current = current;
         this.current_travel_time = 0;
         this.destination_distance = 0;
